@@ -46,7 +46,8 @@ int Editor::print_contents_on_line(int line) const {
 int Editor::edit_command() {
     std::cout << "Edit which line? ";
     int line;
-    std::cin >> line; if (std::cin.fail() || line < 0 || line >= m_contents->size()) {
+    std::cin >> line; 
+    if (std::cin.fail() || line < 0) {
         std::cout << "Not a valid line number!\n";
         std::cin.clear();
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
@@ -57,6 +58,11 @@ int Editor::edit_command() {
 }
 
 int Editor::edit_line(int line) {
+
+    if (line >= m_contents->size()) {
+        m_contents->resize(line + 1, "");
+    }
+
     std::cout << "> ";
     std::string input;
 
