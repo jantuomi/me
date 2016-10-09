@@ -40,6 +40,9 @@ int Editor::run_editor() {
         case 'b':
             prepend_before_command();
             break;
+        case 's':
+            swap_lines_command();
+            break;
         default:
             std::cout << "Not a recognized command " << input << ".\n";
             break;
@@ -53,7 +56,7 @@ int Editor::print_contents_on_line(int line) const {
 
     int output_length = m_contents->size();
     bool truncated = false;
-    int line_max = Utils::window_height() - 3;
+    int line_max = std::max(Utils::window_height() - 4, 0);
 
     int line_number_width = Utils::count_digits(m_contents->size());
 
@@ -61,6 +64,11 @@ int Editor::print_contents_on_line(int line) const {
         output_length = line + line_max;
         truncated = true;
     }
+
+    if (line != 0) {
+        std::cout << "...\n";
+    }
+
     for (int i = line; i < output_length; i++) {
         std::cout << std::setw(line_number_width) << i;
         std::cout << " " << m_contents->at(i) << '\n';
@@ -100,6 +108,7 @@ int Editor::edit_line(int line) {
     std::cin.clear();
     (*m_contents)[line] = input;
 
+    move_to_line(line);
     return 0;
 }
 
@@ -217,4 +226,40 @@ int Editor::prepend_before_command() {
 int Editor::prepend_before_line(int line) {
     m_contents->insert(m_contents->begin() + line, "");
     return edit_line(line);
+}
+
+int Editor::swap_lines_command() {
+
+    std::cout << "First line to swap? ";
+    int first;
+    std::cin >> first;
+    if (std::cin.fail() || first < 0 || first >= m_contents->size()) {
+        std::cout << "Not a valid line number!\n";
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
+        return 1;
+    }
+
+    std::cout << "Second line to swap? ";
+    int second;
+    std::cin >> second;
+    if (std::cin.fail() || second < 0 || second >= m_contents->size()) {
+        std::cout << "Not a valid line number!\n";
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
+        return 1;
+    }
+
+    return swap_lines(first, second);
+}
+
+int Editor::swap_lines(int first, int second) {
+    std::string first_str = m_contents->at(first);
+    std::string second_str = m_contents->at(second);
+
+    (*m_contents)[first] = second_str;
+    (*m_contents)[second] = first_str;
+
+    move_to_line(first);
+    return 0;
 }
