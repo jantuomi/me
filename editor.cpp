@@ -5,7 +5,7 @@
 #include <iostream>
 
 Editor::Editor(std::vector<std::string>* contents, const std::string& filename):
-    m_current_line(0), m_filename(filename)  {
+    m_current_line(0), m_filename(filename), m_stopped(false)  {
 
     m_contents = contents;
 }
@@ -13,8 +13,7 @@ Editor::Editor(std::vector<std::string>* contents, const std::string& filename):
 int Editor::run_editor() {
     std::vector<std::string>* c = m_contents;
 
-    bool stopped = false;
-    while (!stopped) {
+    while (!m_stopped) {
         print_contents_on_line(m_current_line);
         
         char input = Utils::getch();
@@ -27,6 +26,9 @@ int Editor::run_editor() {
             break;
         case 'w':
             write_command();
+            break;
+        case 'q':
+            quit_command();
             break;
         default:
             break;
@@ -111,4 +113,16 @@ int Editor::write() {
     file.close();
     
     return 0;   
+}
+
+int Editor::quit_command() {
+    std::cout << "Really quit? [y/n] ";
+    char answer = Utils::getch();
+
+    if (answer == 'y') {
+        m_stopped = true;
+        std::cout << "\n";
+    }
+
+    return 0;
 }

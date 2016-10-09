@@ -14,11 +14,13 @@ class Editor {
         std::vector<std::string>* m_contents;
         std::string m_filename;
         int m_current_line;
+        bool m_stopped;
 
         int print_contents_on_line(int line) const;
         int edit_command();
         int move_to_command();
         int write_command();
+        int quit_command();
 
         int edit_line(int line);
         int move_to_line(int line);
