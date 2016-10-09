@@ -1,10 +1,11 @@
 #include "editor.h"
 #include "utils.h"
+#include <fstream>
 #include <limits>
 #include <iostream>
 
-Editor::Editor(std::vector<std::string>* contents):
-    m_current_line(0)  {
+Editor::Editor(std::vector<std::string>* contents, const std::string& filename):
+    m_current_line(0), m_filename(filename)  {
 
     m_contents = contents;
 }
@@ -23,6 +24,9 @@ int Editor::run_editor() {
             break;
         case 'm':
             move_to_command();
+            break;
+        case 'w':
+            write_command();
             break;
         default:
             break;
@@ -79,4 +83,32 @@ int Editor::move_to_command() {
 int Editor::move_to_line(int line) {
     m_current_line = line;
     return 0;
+}
+
+int Editor::write_command() {
+    std::cout << "Write to file? [y/n] ";
+    char answer = Utils::getch();
+
+    if (answer == 'y') {
+        return write();
+    }
+
+    return 0;
+}
+
+int Editor::write() {
+    std::ofstream file;
+    file.open(m_filename);
+    if (file.fail()) {
+        std::cout << "Can't open file " << m_filename << " for writing!";
+        return 1;
+    }
+
+    for (int i = 0; i < m_contents->size(); i++) {
+        file << m_contents->at(i) << '\n';
+    }
+
+    file.close();
+    
+    return 0;   
 }

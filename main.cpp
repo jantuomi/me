@@ -32,7 +32,7 @@ int main(int argc, char** argv) {
         return 1;
     }
 
-    Editor editor(contents);
+    Editor editor(contents, filepath);
     editor.run_editor();
 
     delete contents;
