@@ -14,6 +14,10 @@ Editor::Editor(std::vector<std::string>* contents, const std::string& filename):
 int Editor::run_editor() {
 
     while (!m_stopped) {
+        if (m_contents->size() == 0) {
+            m_contents->push_back("");
+        }
+
         print_contents_on_line(m_current_line);
         
         char input = Utils::getch();
@@ -53,26 +57,27 @@ int Editor::run_editor() {
 int Editor::print_contents_on_line(int line) const {
     Utils::clear_screen();
 
-    int output_length = m_contents->size();
-    bool truncated = false;
-    int line_max = std::max(Utils::window_height() - 4, 0);
+    int file_length = m_contents->size();
+    int line_diff = Utils::window_height() / 2 - 2;
+    int start_line = std::max(0, line - line_diff);
+    int end_line = std::max(0, std::min(file_length - 1, line + line_diff));
 
     int line_number_width = Utils::count_digits(m_contents->size());
 
-    if ((int) m_contents->size() > line + line_max) {
-        output_length = line + line_max;
-        truncated = true;
-    }
-
-    if (line != 0) {
+    if (start_line != 0) {
         std::cout << "...\n";
     }
 
-    for (int i = line; i < output_length; i++) {
+    for (int i = start_line; i <= end_line; i++) {
+        if (i == line) {
+            std::cout << "> ";
+        }
+
         std::cout << std::setw(line_number_width) << i;
         std::cout << " " << m_contents->at(i) << '\n';
     }
-    if (truncated) {
+
+    if (end_line != file_length - 1) {
         std::cout << "...\n";
     }
 
