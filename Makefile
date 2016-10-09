@@ -1,6 +1,6 @@
 PREFIX=$(PREFIX)
 all:
-	g++ *.cpp -o me -Wall -O2
+	g++ -std=c++11 *.cpp -o me -Wall -O2
 
 clean: me
 	rm 'me'
