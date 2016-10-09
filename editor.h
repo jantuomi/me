@@ -21,10 +21,12 @@ class Editor {
         int move_to_command();
         int write_command();
         int quit_command();
+        int delete_and_clamp_command();
 
         int edit_line(int line);
         int move_to_line(int line);
         int write();
+        int delete_and_clamp(int line);
 };
 
 #endif

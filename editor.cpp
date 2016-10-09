@@ -30,6 +30,9 @@ int Editor::run_editor() {
         case 'q':
             quit_command();
             break;
+        case 'd':
+            delete_and_clamp_command();
+            break;
         default:
             break;
         }
@@ -44,12 +47,14 @@ int Editor::print_contents_on_line(int line) const {
         output_length = line + OUTPUT_LINE_MAX;
         truncated = true;
     }
-    for (int i = line; i < std::min((int) m_contents->size(), line + OUTPUT_LINE_MAX); i++) {
+    for (int i = line; i < output_length; i++) {
         std::cout << i << " " << m_contents->at(i) << '\n';
     }
     if (truncated) {
         std::cout << "...\n";
     }
+
+    return 0;
 }
 
 int Editor::edit_command() {
@@ -139,5 +144,24 @@ int Editor::quit_command() {
         std::cout << "\n";
     }
 
+    return 0;
+}
+
+int Editor::delete_and_clamp_command() {
+    std::cout << "Delete and clamp which line? ";
+    int line;
+    std::cin >> line;
+    if (std::cin.fail() || line < 0 || line >= m_contents->size()) {
+        std::cout << "Not a valid line number!\n";
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
+        return 1;
+    }
+
+    return delete_and_clamp(line);
+}
+
+int Editor::delete_and_clamp(int line) {
+    m_contents->erase(m_contents->begin() + line);
     return 0;
 }
