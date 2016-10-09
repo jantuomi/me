@@ -33,6 +33,9 @@ int Editor::run_editor() {
         case 'd':
             delete_and_clamp_command();
             break;
+        case 'a':
+            append_after_command();
+            break;
         default:
             break;
         }
@@ -165,3 +168,23 @@ int Editor::delete_and_clamp(int line) {
     m_contents->erase(m_contents->begin() + line);
     return 0;
 }
+
+int Editor::append_after_command() {
+    std::cout << "Append after which line? ";
+    int line;
+    std::cin >> line;
+    if (std::cin.fail() || line < 0 || line >= m_contents->size()) {
+        std::cout << "Not a valid line number!\n";
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
+        return 1;
+    }
+
+    return append_after_line(line);
+}
+
+int Editor::append_after_line(int line) {
+    m_contents->insert(m_contents->begin() + line + 1, "");
+    return edit_line(line + 1);
+}
+
