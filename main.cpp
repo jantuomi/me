@@ -1,19 +1,19 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <vector>
 #include "editor.h"
 
-std::string* read_file(const std::string& filename) {
+std::vector<std::string>* read_file(const std::string& filename) {
     std::ifstream file(filename);
 
     if (file.fail())
         return nullptr;
 
     std::string str;
-    std::string* file_contents = new std::string();
+    std::vector<std::string>* file_contents = new std::vector<std::string>();
     while (std::getline(file, str)) {
-        *file_contents += str;
-        file_contents->push_back('\n');
+        file_contents->push_back(str);
     }
     
     return file_contents;
@@ -26,7 +26,7 @@ int main(int argc, char** argv) {
     }
 
     std::string filepath(argv[1]);
-    std::string* contents = read_file(filepath);
+    std::vector<std::string>* contents = read_file(filepath);
     if (contents == nullptr) {
         std::cout << "Error reading file.\n";
         return 1;
