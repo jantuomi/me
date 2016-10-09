@@ -38,8 +38,17 @@ int Editor::run_editor() {
 }
 
 int Editor::print_contents_on_line(int line) const {
+    int output_length = m_contents->size();
+    bool truncated = false;
+    if ((int) m_contents->size() > line + OUTPUT_LINE_MAX) {
+        output_length = line + OUTPUT_LINE_MAX;
+        truncated = true;
+    }
     for (int i = line; i < std::min((int) m_contents->size(), line + OUTPUT_LINE_MAX); i++) {
         std::cout << i << " " << m_contents->at(i) << '\n';
+    }
+    if (truncated) {
+        std::cout << "...\n";
     }
 }
 
