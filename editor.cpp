@@ -36,7 +36,11 @@ int Editor::run_editor() {
         case 'a':
             append_after_command();
             break;
+        case 'b':
+            prepend_before_command();
+            break;
         default:
+            std::cout << "Not a recognized command " << input << ".\n";
             break;
         }
     }
@@ -188,3 +192,21 @@ int Editor::append_after_line(int line) {
     return edit_line(line + 1);
 }
 
+int Editor::prepend_before_command() {
+    std::cout << "Prepend before which line? ";
+    int line;
+    std::cin >> line;
+    if (std::cin.fail() || line < 0 || line >= m_contents->size()) {
+        std::cout << "Not a valid line number!\n";
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
+        return 1;
+    }
+
+    return prepend_before_line(line);
+}
+
+int Editor::prepend_before_line(int line) {
+    m_contents->insert(m_contents->begin() + line, "");
+    return edit_line(line);
+}
