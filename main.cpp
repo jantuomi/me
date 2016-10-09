@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include "editor.h"
 
 std::string* read_file(const std::string& filename) {
     std::ifstream file(filename);
@@ -30,6 +31,9 @@ int main(int argc, char** argv) {
         std::cout << "Error reading file.\n";
         return 1;
     }
+
+    Editor editor(contents);
+    editor.run_editor();
 
     delete contents;
 
