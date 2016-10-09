@@ -3,6 +3,7 @@
 #include <fstream>
 #include <limits>
 #include <iostream>
+#include <iomanip>
 
 Editor::Editor(std::vector<std::string>* contents, const std::string& filename):
     m_current_line(0), m_filename(filename), m_stopped(false)  {
@@ -48,14 +49,21 @@ int Editor::run_editor() {
 }
 
 int Editor::print_contents_on_line(int line) const {
+    Utils::clear_screen();
+
     int output_length = m_contents->size();
     bool truncated = false;
-    if ((int) m_contents->size() > line + OUTPUT_LINE_MAX) {
-        output_length = line + OUTPUT_LINE_MAX;
+    int line_max = Utils::window_height() - 3;
+
+    int line_number_width = Utils::count_digits(m_contents->size());
+
+    if ((int) m_contents->size() > line + line_max) {
+        output_length = line + line_max;
         truncated = true;
     }
     for (int i = line; i < output_length; i++) {
-        std::cout << i << " " << m_contents->at(i) << '\n';
+        std::cout << std::setw(line_number_width) << i;
+        std::cout << " " << m_contents->at(i) << '\n';
     }
     if (truncated) {
         std::cout << "...\n";

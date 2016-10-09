@@ -2,6 +2,8 @@
 #include <unistd.h>   //_getch
 #include <termios.h>  //_getch
 #include <stdio.h>
+#include <sys/ioctl.h>
+#include <iostream>
 
 /* Thanks to StackOverflow user mf_ */
 char Utils::getch(){
@@ -24,4 +26,23 @@ char Utils::getch(){
         perror ("tcsetattr ~ICANON");
     //printf("%c\n",buf);
     return buf;
- }
+}
+
+int Utils::window_height() {
+    struct winsize w;
+    ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
+
+    return w.ws_row;
+}
+
+void Utils::clear_screen() {
+    int height = window_height();
+    for (int i = 0; i < height; i++) {
+        std::cout << '\n';
+    }
+}
+
+int Utils::count_digits(int num) {
+    std::string repr = std::to_string(num);
+    return repr.size();
+}

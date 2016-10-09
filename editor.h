@@ -9,8 +9,6 @@ class Editor {
         Editor(std::vector<std::string>* contents, const std::string& filename);
         int run_editor();
     private:
-        const static int OUTPUT_LINE_MAX = 10;
-
         std::vector<std::string>* m_contents;
         std::string m_filename;
         int m_current_line;
