@@ -16,7 +16,10 @@ class Editor {
 
         int print_contents_on_line(int line) const;
         int edit_command();
+        int move_to_command();
+
         int edit_line(int line);
+        int move_to_line(int line);
 };
 
 #endif

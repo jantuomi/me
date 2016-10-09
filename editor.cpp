@@ -21,6 +21,9 @@ int Editor::run_editor() {
         case 'e':
             edit_command();
             break;
+        case 'm':
+            move_to_command();
+            break;
         default:
             break;
         }
@@ -29,7 +32,7 @@ int Editor::run_editor() {
 }
 
 int Editor::print_contents_on_line(int line) const {
-    for (int i = line; i < std::min(m_contents->size(), line + OUTPUT_LINE_MAX); i++) {
+    for (int i = line; i < std::min((int) m_contents->size(), line + OUTPUT_LINE_MAX); i++) {
         std::cout << i << " " << m_contents->at(i) << '\n';
     }
 }
@@ -37,15 +40,14 @@ int Editor::print_contents_on_line(int line) const {
 int Editor::edit_command() {
     std::cout << "Edit which line? ";
     int line;
-    std::cin >> line;
-    if (std::cin.fail() || line < 0 || line >= m_contents->size()) {
+    std::cin >> line; if (std::cin.fail() || line < 0 || line >= m_contents->size()) {
         std::cout << "Not a valid line number!\n";
         std::cin.clear();
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
         return 1;
     }
 
-    edit_line(line);
+    return edit_line(line);
 }
 
 int Editor::edit_line(int line) {
@@ -57,5 +59,24 @@ int Editor::edit_line(int line) {
     std::cin.clear();
     (*m_contents)[line] = input;
 
+    return 0;
+}
+
+int Editor::move_to_command() {
+    std::cout << "Move to which line? ";
+    int line;
+    std::cin >> line;
+    if (std::cin.fail() || line < 0 || line >= m_contents->size()) {
+        std::cout << "Not a valid line number!\n";
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
+        return 1;
+    }
+
+    return move_to_line(line);
+}
+
+int Editor::move_to_line(int line) {
+    m_current_line = line;
     return 0;
 }
