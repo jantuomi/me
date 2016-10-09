@@ -6,13 +6,12 @@
 #include <iomanip>
 
 Editor::Editor(std::vector<std::string>* contents, const std::string& filename):
-    m_current_line(0), m_filename(filename), m_stopped(false)  {
+    m_contents(contents), m_filename(filename), m_current_line(0), m_stopped(false)  {
 
     m_contents = contents;
 }
 
 int Editor::run_editor() {
-    std::vector<std::string>* c = m_contents;
 
     while (!m_stopped) {
         print_contents_on_line(m_current_line);
@@ -96,7 +95,7 @@ int Editor::edit_command() {
 
 int Editor::edit_line(int line) {
 
-    if (line >= m_contents->size()) {
+    if (line >= (int) m_contents->size()) {
         m_contents->resize(line + 1, "");
     }
 
@@ -116,7 +115,7 @@ int Editor::move_to_command() {
     std::cout << "Move to which line? ";
     int line;
     std::cin >> line;
-    if (std::cin.fail() || line < 0 || line >= m_contents->size()) {
+    if (std::cin.fail() || line < 0 || line >= (int) m_contents->size()) {
         std::cout << "Not a valid line number!\n";
         std::cin.clear();
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
@@ -150,7 +149,7 @@ int Editor::write() {
         return 1;
     }
 
-    for (int i = 0; i < m_contents->size(); i++) {
+    for (int i = 0; i < (int) m_contents->size(); i++) {
         file << m_contents->at(i) << '\n';
     }
 
@@ -175,7 +174,7 @@ int Editor::delete_and_clamp_command() {
     std::cout << "Delete and clamp which line? ";
     int line;
     std::cin >> line;
-    if (std::cin.fail() || line < 0 || line >= m_contents->size()) {
+    if (std::cin.fail() || line < 0 || line >= (int) m_contents->size()) {
         std::cout << "Not a valid line number!\n";
         std::cin.clear();
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
@@ -194,7 +193,7 @@ int Editor::append_after_command() {
     std::cout << "Append after which line? ";
     int line;
     std::cin >> line;
-    if (std::cin.fail() || line < 0 || line >= m_contents->size()) {
+    if (std::cin.fail() || line < 0 || line >= (int) m_contents->size()) {
         std::cout << "Not a valid line number!\n";
         std::cin.clear();
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
@@ -213,7 +212,7 @@ int Editor::prepend_before_command() {
     std::cout << "Prepend before which line? ";
     int line;
     std::cin >> line;
-    if (std::cin.fail() || line < 0 || line >= m_contents->size()) {
+    if (std::cin.fail() || line < 0 || line >= (int) m_contents->size()) {
         std::cout << "Not a valid line number!\n";
         std::cin.clear();
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
@@ -233,7 +232,7 @@ int Editor::swap_lines_command() {
     std::cout << "First line to swap? ";
     int first;
     std::cin >> first;
-    if (std::cin.fail() || first < 0 || first >= m_contents->size()) {
+    if (std::cin.fail() || first < 0 || first >= (int) m_contents->size()) {
         std::cout << "Not a valid line number!\n";
         std::cin.clear();
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
@@ -243,7 +242,7 @@ int Editor::swap_lines_command() {
     std::cout << "Second line to swap? ";
     int second;
     std::cin >> second;
-    if (std::cin.fail() || second < 0 || second >= m_contents->size()) {
+    if (std::cin.fail() || second < 0 || second >= (int) m_contents->size()) {
         std::cout << "Not a valid line number!\n";
         std::cin.clear();
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');

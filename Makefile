@@ -1,19 +1,28 @@
-PREFIX=$(PREFIX)
+CXX=g++
+CXXFLAGS=-std=c++11 -Wall -O2
+SRC=*.cpp
+TARGET=me
+PREFIX=$$PREFIX
 all:
-	g++ -std=c++11 *.cpp -o me -Wall -O2
+	$(CXX) $(SRC) $(CXXFLAGS) -o $(TARGET)  
+	echo "Done."
 
-clean: me
-	rm 'me'
+clean: $(TARGET)
+	rm $(TARGET)
 
 test:
-	echo $$PREFIX
+	echo $(PREFIX)
 
-install: me
+install: $(TARGET)
 	if [ -z "$$PREFIX" ] ; then \
 		echo "No PREFIX set. Aborting install."; \
 	else \
 		echo "Installing in $$PREFIX/bin/..."; \
 		cp me "$$PREFIX"/bin/me; \
-		echo "Done."; \
+		if [ $$? -eq 0 ] ; then \
+			echo "Installation successful."; \
+		else \
+			echo "Installation failed."; \
+		fi \
 	fi	
 
